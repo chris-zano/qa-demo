@@ -11,6 +11,11 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/chris-zano/qa-demo.git'
             }
         }
+        stage('Build') {
+            steps {
+                echo "Hello World"
+            }
+        }
         stage('Test') {
             steps {
                 sh '''
