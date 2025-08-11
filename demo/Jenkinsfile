@@ -13,6 +13,7 @@ pipeline {
         }
         stage('Test') {
             steps {
+                sh 'cd demo'
                 sh 'mvn clean test'
             }
         }
