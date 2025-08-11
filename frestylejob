@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Starting the build..."
+                sh 'echo "Building..."'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Running tests..."
+                sh 'exit 1'
+            }
+        }
+    }
+
+    post {
+        success {
+            emailext(
+                to: 'team@example.com',
+                subject: "Jenkins Build #${env.BUILD_NUMBER} Succeeded",
+                body: """
+                Hello Team,
+
+                The Jenkins build for *${env.JOB_NAME}* has completed successfully.
+
+                Build Number: ${env.BUILD_NUMBER}
+                Build URL: ${env.BUILD_URL}
+
+                Regards,
+                Jenkins
+                """,
+                mimeType: 'text/plain'
+            )
+        }
+        failure {
+            emailext(
+                to: 'team@example.com',
+                subject: "Jenkins Build #${env.BUILD_NUMBER} Failed",
+                body: """
+                Hello Team,
+
+                The Jenkins build for *${env.JOB_NAME}* has failed.
+
+                Build Number: ${env.BUILD_NUMBER}
+                Build URL: ${env.BUILD_URL}
+
+                Please investigate the failure.
+
+                Regards,
+                Jenkins
+                """,
+                mimeType: 'text/plain'
+            )
+        }
+    }
+}
