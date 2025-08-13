@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'qa'
+    }
 
     tools {
         maven 'M3'
@@ -21,11 +23,26 @@ pipeline {
             }
         }
         stage('Test') {
-            steps {
-                sh '''
-                cd demo
-                mvn clean test
-                '''
+            parallel{
+                stage('Run Prettier Check') {
+                    steps {
+                        echo "this is a prettier check"
+                    }
+                }
+
+                stage('Run ESLint') {
+                    steps {
+                        echo 'this is a eslint check'
+                    }
+                }
+
+                stage('Run Test coverage') {
+                    steps {
+                        withCredentials([string(credentialsId: 'hello-text', variable: 'helloText')]) {
+                            echo "Hello World ${helloText}"
+                        }
+                    }
+                }
             }
         }
     }
