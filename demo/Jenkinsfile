@@ -13,7 +13,11 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo "Hello World"
+                withCredentials([
+                    string(credentialsId: 'hello-text', variable: 'helloText')
+                ]) {
+                    echo "Hello World ${helloText}"
+                }
             }
         }
         stage('Test') {
